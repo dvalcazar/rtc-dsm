@@ -12,6 +12,19 @@ window.onload = function () {
 	// Grab the room name from the URL
 	var room = location.search && location.search.split('?')[1];
 
+    $("#remotes").bind("DOMSubtreeModified", function() {
+
+        var numChildren = $("#remotes").children().length;
+
+        if (numChildren == 1) {
+            $("#remotes video").addClass("col-xs-12");
+        } else if (numChildren == 2) {
+            $("#remotes video:first-child").addClass("col-xs-12 col-sm-6");
+            $("#remotes video:nth-child(2)").addClass("col-xs-12 col-sm-6");
+
+        }
+    });
+
 	// Create our WebRTC connection
 	var webrtc = new SimpleWebRTC({
 			// the element that will hold local video
@@ -24,13 +37,17 @@ window.onload = function () {
 
 	// When it's ready, and we have a room from the URL, join the call
 	webrtc.on('readyToCall', function() {
-		if (room) webrtc.joinRoom(room);
+		if (room) {
+
+            webrtc.joinRoom(room);
+
+        }
 	});
 
 	// Set the room name
 	function setRoom(name) {
         $('form').remove();
-        $('h1').text('Welcome to room: ' + name);
+        $('h1').text('Welcome to Room: ' + name);
         $('#subTitle').text('Share this link to have friends join you:');
         $('#roomLink').text(location.href);
         $('body').addClass('active');
